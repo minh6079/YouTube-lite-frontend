@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>YouTube Player</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 10px;
+            font-family: Helvetica, Arial, sans-serif;
+            background-color: #5568d3;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            border: 1px solid #ccc;
+        }
+        
+        h1 {
+            color: #333;
+            margin: 0 0 20px 0;
+            text-align: center;
+            font-size: 24px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ccc;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        input:focus {
+            border-color: #5568d3;
+            outline: none;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 10px;
+            background-color: #5568d3;
+            color: white;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        button:active {
+            background-color: #4557b2;
+        }
+        
+        .btn-secondary {
+            background-color: #e91e63;
+        }
+        
+        .btn-secondary:active {
+            background-color: #c2185b;
+        }
+        
+        .video-container {
+            margin-top: 20px;
+            background-color: #000;
+            display: none;
+        }
+        
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        
+        .error {
+            color: #d32f2f;
+            margin-top: 8px;
+            font-size: 13px;
+            display: none;
+        }
+        
+        .info {
+            color: #1976d2;
+            margin-top: 10px;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .show {
+            display: block;
+        }
+        
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube Player</h1>
+        
+        <div class="input-group">
+            <label for="videoUrl">Enter YouTube URL:</label>
+            <input 
+                type="text" 
+                id="videoUrl" 
+                placeholder="youtube.com/watch?v=VIDEO_ID"
+            />
+            <p class="error" id="error">Please enter a valid YouTube URL</p>
+        </div>
+        
+        <div>
+            <button type="button" onclick="processVideo()">Process Video</button>
+            <button type="button" class="btn-secondary" onclick="openVideo()">Open in New Tab</button>
+        </div>
+        
+        <div class="video-container" id="videoContainer">
+            <div class="video-wrapper">
+                <iframe 
+                    id="videoFrame"
+                    frameborder="0"
+                    allowfullscreen
+                ></iframe>
+            </div>
+        </div>
+        
+        <p class="info">iOS 6 Compatible</p>
+    </div>
+
+    <script>
+        function getVideoId(url) {
+            var patterns = [
+                /youtube\.com\/watch\?v=([^&\n?#]+)/,
+                /youtu\.be\/([^&\n?#]+)/,
+                /youtube\.com\/embed\/([^&\n?#]+)/,
+                /youtube\.com\/v\/([^&\n?#]+)/
+            ];
+            
+            for (var i = 0; i < patterns.length; i++) {
+                var match = url.match(patterns[i]);
+                if (match && match[1]) {
+                    return match[1];
+                }
+            }
+            return null;
+        }
+        
+        function trim(str) {
+            return str.replace(/^\s+|\s+$/g, '');
+        }
+        
+        function showError(msg) {
+            var error = document.getElementById('error');
+            error.innerHTML = msg;
+            error.className = 'error show';
+        }
+        
+        function hideError() {
+            var error = document.getElementById('error');
+            error.className = 'error hide';
+        }
+        
+        function showVideo() {
+            var container = document.getElementById('videoContainer');
+            container.className = 'video-container show';
+        }
+        
+        function hideVideo() {
+            var container = document.getElementById('videoContainer');
+            container.className = 'video-container hide';
+        }
+        
+        function processVideo() {
+            var input = document.getElementById('videoUrl');
+            var url = trim(input.value);
+            var frame = document.getElementById('videoFrame');
+            
+            hideError();
+            
+            if (url === '') {
+                showError('Please enter a YouTube URL');
+                return;
+            }
+            
+            var videoId = getVideoId(url);
+            
+            if (!videoId) {
+                showError('Please enter a valid YouTube URL');
+                hideVideo();
+                return;
+            }
+            
+            var embedUrl = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
+            frame.src = embedUrl;
+            showVideo();
+        }
+        
+        function openVideo() {
+            var input = document.getElementById('videoUrl');
+            var url = trim(input.value);
+            
+            hideError();
+            
+            if (url === '') {
+                showError('Please enter a YouTube URL');
+                return;
+            }
+            
+            var videoId = getVideoId(url);
+            
+            if (!videoId) {
+                showError('Please enter a valid YouTube URL');
+                return;
+            }
+            
+            var youtubeUrl = 'https://www.youtube.com/watch?v=' + videoId;
+            window.open(youtubeUrl, '_blank');
+        }
+        
+        // Enter key support
+        document.getElementById('videoUrl').onkeypress = function(event) {
+            event = event || window.event;
+            var keyCode = event.keyCode || event.which;
+            if (keyCode === 13) {
+                processVideo();
+                return false;
+            }
+        };
+    </script>
+</body>
+</html>
