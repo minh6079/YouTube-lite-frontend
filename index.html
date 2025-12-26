@@ -62,6 +62,30 @@
             border-color: #667eea;
         }
         
+        .api-key-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f0f7ff;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+        
+        .api-key-section label {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .api-key-section input {
+            font-size: 14px;
+        }
+        
+        .api-key-section small {
+            display: block;
+            margin-top: 8px;
+            color: #666;
+            font-size: 12px;
+        }
+        
         .button-group {
             display: flex;
             flex-direction: column;
@@ -91,6 +115,65 @@
         
         button.secondary {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        button.tertiary {
+            background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+        }
+        
+        .search-results {
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .search-results.active {
+            display: block;
+        }
+        
+        .search-results h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .result-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .result-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-thumbnail {
+            width: 160px;
+            height: 90px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        
+        .result-info {
+            flex: 1;
+        }
+        
+        .result-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .result-channel {
+            color: #666;
+            font-size: 14px;
         }
         
         .video-container {
@@ -130,6 +213,17 @@
             display: block;
         }
         
+        .loading {
+            text-align: center;
+            color: #667eea;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
@@ -138,6 +232,15 @@
             h1 {
                 font-size: 1.5em;
             }
+            
+            .result-item {
+                flex-direction: column;
+            }
+            
+            .result-thumbnail {
+                width: 100%;
+                height: auto;
+            }
         }
     </style>
 </head>
@@ -145,12 +248,22 @@
     <div class="container">
         <h1>🎥 YouTube Video Player</h1>
         
+        <div class="api-key-section">
+            <label for="apiKey">YouTube API Key (optional for search):</label>
+            <input 
+                type="text" 
+                id="apiKey" 
+                placeholder="AIzaSy..."
+            >
+            <small>Get your free API key at <a href="https://console.cloud.google.com" target="_blank">Google Cloud Console</a></small>
+        </div>
+        
         <div class="input-group">
-            <label for="videoUrl">Enter YouTube Video URL:</label>
+            <label for="videoUrl">Enter YouTube Video URL or Search Query:</label>
             <input 
                 type="text" 
                 id="videoUrl" 
-                placeholder="https://www.youtube.com/watch?v=VIDEO_ID"
+                placeholder="URL or search terms like 'funny cats'"
             >
             <p class="error" id="error">Please enter a valid YouTube URL</p>
         </div>
@@ -158,6 +271,14 @@
         <div class="button-group">
             <button id="processBtn">Process Video</button>
             <button class="secondary" id="openBtn">Open in New Tab</button>
+            <button class="tertiary" id="searchBtn">Search YouTube</button>
+        </div>
+        
+        <div class="loading" id="loading">Searching YouTube...</div>
+        
+        <div class="search-results" id="searchResults">
+            <h2>Search Results</h2>
+            <div id="resultsList"></div>
         </div>
         
         <div class="video-container" id="videoContainer">
@@ -198,11 +319,30 @@
             document.getElementById('error').classList.remove('active');
         };
         
-        const loadVideo = () => {
-            const input = document.getElementById('videoUrl');
-            const url = input.value.trim();
+        const showLoading = () => {
+            document.getElementById('loading').classList.add('active');
+        };
+        
+        const hideLoading = () => {
+            document.getElementById('loading').classList.remove('active');
+        };
+        
+        const loadVideo = (videoId) => {
             const videoContainer = document.getElementById('videoContainer');
             const videoFrame = document.getElementById('videoFrame');
+            const searchResults = document.getElementById('searchResults');
+            
+            hideError();
+            searchResults.classList.remove('active');
+            
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            videoFrame.src = embedUrl;
+            videoContainer.classList.add('active');
+        };
+        
+        const processVideo = () => {
+            const input = document.getElementById('videoUrl');
+            const url = input.value.trim();
             
             hideError();
             
@@ -214,14 +354,12 @@
             const videoId = getYouTubeVideoId(url);
             
             if (!videoId) {
-                showError('Please enter a valid YouTube URL');
-                videoContainer.classList.remove('active');
+                showError('Please enter a valid YouTube URL or use Search button');
+                document.getElementById('videoContainer').classList.remove('active');
                 return;
             }
             
-            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-            videoFrame.src = embedUrl;
-            videoContainer.classList.add('active');
+            loadVideo(videoId);
         };
         
         const openInNewTab = () => {
@@ -245,11 +383,90 @@
             window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
         };
         
+        const searchYouTube = async () => {
+            const input = document.getElementById('videoUrl');
+            const query = input.value.trim();
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const resultsList = document.getElementById('resultsList');
+            const searchResults = document.getElementById('searchResults');
+            const videoContainer = document.getElementById('videoContainer');
+            
+            hideError();
+            videoContainer.classList.remove('active');
+            
+            if (!query) {
+                showError('Please enter a search query');
+                return;
+            }
+            
+            // Check if it's a URL first
+            const videoId = getYouTubeVideoId(query);
+            if (videoId) {
+                loadVideo(videoId);
+                return;
+            }
+            
+            if (!apiKey) {
+                showError('Please enter a YouTube API key to use search');
+                return;
+            }
+            
+            showLoading();
+            searchResults.classList.remove('active');
+            resultsList.innerHTML = '';
+            
+            try {
+                const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&maxResults=10&type=video&key=${apiKey}`;
+                
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                
+                if (data.error) {
+                    hideLoading();
+                    showError('API Error: ' + data.error.message);
+                    return;
+                }
+                
+                if (!data.items || data.items.length === 0) {
+                    resultsList.innerHTML = '<div class="result-item"><div class="result-info"><div class="result-title">No results found</div></div></div>';
+                } else {
+                    data.items.forEach(item => {
+                        const videoId = item.id.videoId;
+                        const title = item.snippet.title;
+                        const channel = item.snippet.channelTitle;
+                        const thumbnail = item.snippet.thumbnails.medium.url;
+                        
+                        const resultItem = document.createElement('div');
+                        resultItem.className = 'result-item';
+                        resultItem.onclick = () => loadVideo(videoId);
+                        
+                        resultItem.innerHTML = `
+                            <img src="${thumbnail}" alt="${title}" class="result-thumbnail">
+                            <div class="result-info">
+                                <div class="result-title">${title}</div>
+                                <div class="result-channel">${channel}</div>
+                            </div>
+                        `;
+                        
+                        resultsList.appendChild(resultItem);
+                    });
+                }
+                
+                searchResults.classList.add('active');
+                hideLoading();
+                
+            } catch (error) {
+                hideLoading();
+                showError('Search failed: ' + error.message);
+            }
+        };
+        
         // Event listeners
-        document.getElementById('processBtn').addEventListener('click', loadVideo);
+        document.getElementById('processBtn').addEventListener('click', processVideo);
         document.getElementById('openBtn').addEventListener('click', openInNewTab);
+        document.getElementById('searchBtn').addEventListener('click', searchYouTube);
         document.getElementById('videoUrl').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') loadVideo();
+            if (e.key === 'Enter') processVideo();
         });
     </script>
 </body>
