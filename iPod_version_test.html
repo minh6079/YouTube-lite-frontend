@@ -28,7 +28,7 @@
         .wrapper {
             display: table;
             width: 100%;
-            height: 100vh;
+            min-height: 100vh;
         }
         
         .wrapper-inner {
@@ -41,7 +41,7 @@
             -webkit-border-radius: 20px;
             -moz-border-radius: 20px;
             border-radius: 20px;
-            padding: 40px;
+            padding: 30px;
             -webkit-box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             -moz-box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -52,33 +52,60 @@
         
         h1 {
             color: #333;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             text-align: center;
-            font-size: 2em;
+            font-size: 1.8em;
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .api-key-section {
+            margin-bottom: 20px;
+            padding: 12px;
+            background: #f0f7ff;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+        }
+        
+        .api-key-section label {
+            font-size: 13px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        
+        .api-key-section small {
+            display: block;
+            margin-top: 6px;
+            color: #666;
+            font-size: 11px;
         }
         
         .input-group {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         
         label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             color: #555;
             font-weight: 500;
+            font-size: 14px;
         }
         
         input[type="text"] {
             width: 100%;
-            padding: 15px;
+            padding: 12px;
             border: 2px solid #e0e0e0;
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
-            border-radius: 10px;
-            font-size: 16px;
-            -webkit-transition: border-color 0.3s;
-            -moz-transition: border-color 0.3s;
-            transition: border-color 0.3s;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            border-radius: 8px;
+            font-size: 14px;
             -webkit-appearance: none;
         }
         
@@ -88,12 +115,12 @@
         }
         
         .button-group {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         
         button {
             width: 100%;
-            padding: 15px;
+            padding: 13px;
             background: #667eea;
             background: -webkit-gradient(linear, left top, right bottom, from(#667eea), to(#764ba2));
             background: -webkit-linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -101,23 +128,17 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
-            border-radius: 10px;
-            font-size: 16px;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            border-radius: 8px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            -webkit-transition: -webkit-transform 0.2s;
-            -moz-transition: -moz-transform 0.2s;
-            transition: transform 0.2s;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             -webkit-appearance: none;
         }
         
         button:active {
-            -webkit-transform: translateY(0);
-            -moz-transform: translateY(0);
-            transform: translateY(0);
             opacity: 0.9;
         }
         
@@ -129,12 +150,64 @@
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
         
-        .video-container {
-            margin-top: 30px;
+        button.tertiary {
+            background: #fc466b;
+            background: -webkit-gradient(linear, left top, right bottom, from(#fc466b), to(#3f5efb));
+            background: -webkit-linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+            background: -moz-linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+            background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+        }
+        
+        .search-results {
+            margin-top: 20px;
             display: none;
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
-            border-radius: 10px;
+        }
+        
+        .search-results.active {
+            display: block;
+        }
+        
+        .result-item {
+            padding: 12px;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            cursor: pointer;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .result-item:active {
+            background: #e9ecef;
+        }
+        
+        .result-thumbnail {
+            width: 100%;
+            -webkit-border-radius: 6px;
+            -moz-border-radius: 6px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .result-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        
+        .result-channel {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .video-container {
+            margin-top: 20px;
+            display: none;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            border-radius: 8px;
             overflow: hidden;
             -webkit-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             -moz-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -162,11 +235,24 @@
         
         .error {
             color: #e74c3c;
-            margin-top: 10px;
+            margin-top: 8px;
             display: none;
+            font-size: 13px;
         }
         
         .error.active {
+            display: block;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #667eea;
+            margin-top: 15px;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .loading.active {
             display: block;
         }
         
@@ -185,21 +271,39 @@
     <div class="wrapper">
         <div class="wrapper-inner">
             <div class="container">
-                <h1>🎥 YouTube Video Player</h1>
+                <h1>🎥 YouTube Player</h1>
+                
+                <div class="api-key-section">
+                    <label for="apiKey">API Key (for search):</label>
+                    <input 
+                        type="text" 
+                        id="apiKey" 
+                        placeholder="AIzaSy..."
+                    />
+                    <small>Get free key at console.cloud.google.com</small>
+                </div>
                 
                 <div class="input-group">
-                    <label for="videoUrl">Enter YouTube Video URL:</label>
+                    <label for="videoUrl">Enter URL or Search:</label>
                     <input 
                         type="text" 
                         id="videoUrl" 
-                        placeholder="https://www.youtube.com/watch?v=VIDEO_ID"
+                        placeholder="URL or search like 'funny cats'"
                     />
-                    <p class="error" id="error">Please enter a valid YouTube URL</p>
+                    <p class="error" id="error">Error message</p>
                 </div>
                 
                 <div class="button-group">
-                    <button type="button" onclick="loadVideo()">Process Video</button>
-                    <button type="button" class="secondary" onclick="openInNewTab()">Open in New Tab</button>
+                    <button type="button" id="processBtn">Process Video</button>
+                    <button type="button" class="secondary" id="openBtn">Open in New Tab</button>
+                    <button type="button" class="tertiary" id="searchBtn">Search YouTube</button>
+                </div>
+                
+                <div class="loading" id="loading">Searching...</div>
+                
+                <div class="search-results" id="searchResults">
+                    <h2>Search Results</h2>
+                    <div id="resultsList"></div>
                 </div>
                 
                 <div class="video-container" id="videoContainer">
@@ -238,17 +342,7 @@
             if (element.classList) {
                 element.classList.add(className);
             } else {
-                var classes = element.className.split(' ');
-                var found = false;
-                for (var i = 0; i < classes.length; i++) {
-                    if (classes[i] === className) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    element.className += ' ' + className;
-                }
+                element.className += ' ' + className;
             }
         }
         
@@ -256,14 +350,8 @@
             if (element.classList) {
                 element.classList.remove(className);
             } else {
-                var classes = element.className.split(' ');
-                var newClasses = [];
-                for (var i = 0; i < classes.length; i++) {
-                    if (classes[i] !== className && classes[i] !== '') {
-                        newClasses.push(classes[i]);
-                    }
-                }
-                element.className = newClasses.join(' ');
+                var reg = new RegExp('(^|\\s)' + className + '(\\s|$)', 'g');
+                element.className = element.className.replace(reg, ' ').replace(/\s+/g, ' ').replace(/^\s|\s$/g, '');
             }
         }
         
@@ -271,65 +359,194 @@
             return str.replace(/^\s+|\s+$/g, '');
         }
         
-        function loadVideo() {
-            var input = document.getElementById('videoUrl');
-            var url = trim(input.value);
+        function showError(message) {
             var error = document.getElementById('error');
+            error.textContent = message;
+            addClass(error, 'active');
+        }
+        
+        function hideError() {
+            removeClass(document.getElementById('error'), 'active');
+        }
+        
+        function showLoading() {
+            addClass(document.getElementById('loading'), 'active');
+        }
+        
+        function hideLoading() {
+            removeClass(document.getElementById('loading'), 'active');
+        }
+        
+        function playVideo(videoId) {
             var videoContainer = document.getElementById('videoContainer');
             var videoFrame = document.getElementById('videoFrame');
+            var searchResults = document.getElementById('searchResults');
             
-            removeClass(error, 'active');
-            
-            if (!url) {
-                error.textContent = 'Please enter a YouTube URL';
-                addClass(error, 'active');
-                return;
-            }
-            
-            var videoId = getYouTubeVideoId(url);
-            
-            if (!videoId) {
-                error.textContent = 'Please enter a valid YouTube URL';
-                addClass(error, 'active');
-                removeClass(videoContainer, 'active');
-                return;
-            }
+            hideError();
+            removeClass(searchResults, 'active');
             
             var embedUrl = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
             videoFrame.src = embedUrl;
             addClass(videoContainer, 'active');
         }
         
-        function openInNewTab() {
+        function processVideo() {
             var input = document.getElementById('videoUrl');
             var url = trim(input.value);
-            var error = document.getElementById('error');
             
-            removeClass(error, 'active');
+            hideError();
             
             if (!url) {
-                error.textContent = 'Please enter a YouTube URL';
-                addClass(error, 'active');
+                showError('Please enter a YouTube URL');
                 return;
             }
             
             var videoId = getYouTubeVideoId(url);
             
             if (!videoId) {
-                error.textContent = 'Please enter a valid YouTube URL';
-                addClass(error, 'active');
+                showError('Enter valid URL or use Search');
+                removeClass(document.getElementById('videoContainer'), 'active');
+                return;
+            }
+            
+            playVideo(videoId);
+        }
+        
+        function openInNewTab() {
+            var input = document.getElementById('videoUrl');
+            var url = trim(input.value);
+            
+            hideError();
+            
+            if (!url) {
+                showError('Please enter a YouTube URL');
+                return;
+            }
+            
+            var videoId = getYouTubeVideoId(url);
+            
+            if (!videoId) {
+                showError('Please enter a valid YouTube URL');
                 return;
             }
             
             window.open('https://www.youtube.com/watch?v=' + videoId, '_blank');
         }
         
+        function createResultItem(videoId, title, channel, thumbnail) {
+            var item = document.createElement('div');
+            item.className = 'result-item';
+            item.onclick = function() {
+                playVideo(videoId);
+            };
+            
+            var img = document.createElement('img');
+            img.src = thumbnail;
+            img.alt = title;
+            img.className = 'result-thumbnail';
+            
+            var titleDiv = document.createElement('div');
+            titleDiv.className = 'result-title';
+            titleDiv.textContent = title;
+            
+            var channelDiv = document.createElement('div');
+            channelDiv.className = 'result-channel';
+            channelDiv.textContent = channel;
+            
+            item.appendChild(img);
+            item.appendChild(titleDiv);
+            item.appendChild(channelDiv);
+            
+            return item;
+        }
+        
+        function searchYouTube() {
+            var input = document.getElementById('videoUrl');
+            var query = trim(input.value);
+            var apiKey = trim(document.getElementById('apiKey').value);
+            var resultsList = document.getElementById('resultsList');
+            var searchResults = document.getElementById('searchResults');
+            var videoContainer = document.getElementById('videoContainer');
+            
+            hideError();
+            removeClass(videoContainer, 'active');
+            
+            if (!query) {
+                showError('Please enter a search query');
+                return;
+            }
+            
+            var videoId = getYouTubeVideoId(query);
+            if (videoId) {
+                playVideo(videoId);
+                return;
+            }
+            
+            if (!apiKey) {
+                showError('Please enter API key to search');
+                return;
+            }
+            
+            showLoading();
+            removeClass(searchResults, 'active');
+            resultsList.innerHTML = '';
+            
+            var apiUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&q=' + 
+                         encodeURIComponent(query) + '&maxResults=10&type=video&key=' + apiKey;
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', apiUrl, true);
+            
+            xhr.onload = function() {
+                hideLoading();
+                
+                if (xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    
+                    if (data.error) {
+                        showError('API Error: ' + data.error.message);
+                        return;
+                    }
+                    
+                    if (!data.items || data.items.length === 0) {
+                        resultsList.innerHTML = '<div class="result-item"><div class="result-title">No results found</div></div>';
+                    } else {
+                        for (var i = 0; i < data.items.length; i++) {
+                            var item = data.items[i];
+                            var vid = item.id.videoId;
+                            var title = item.snippet.title;
+                            var channel = item.snippet.channelTitle;
+                            var thumbnail = item.snippet.thumbnails.medium.url;
+                            
+                            var resultItem = createResultItem(vid, title, channel, thumbnail);
+                            resultsList.appendChild(resultItem);
+                        }
+                    }
+                    
+                    addClass(searchResults, 'active');
+                } else {
+                    showError('Search failed: ' + xhr.status);
+                }
+            };
+            
+            xhr.onerror = function() {
+                hideLoading();
+                showError('Network error');
+            };
+            
+            xhr.send();
+        }
+        
+        document.getElementById('processBtn').onclick = processVideo;
+        document.getElementById('openBtn').onclick = openInNewTab;
+        document.getElementById('searchBtn').onclick = searchYouTube;
+        
         var input = document.getElementById('videoUrl');
         input.onkeypress = function(e) {
             e = e || window.event;
             var keyCode = e.keyCode || e.which;
             if (keyCode === 13) {
-                loadVideo();
+                processVideo();
                 return false;
             }
         };
